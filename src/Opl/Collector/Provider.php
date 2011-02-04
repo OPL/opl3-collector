@@ -13,10 +13,27 @@ namespace Opl\Collector;
 use Opl\Collector\Exception\InvalidKeyException;
 use Opl\Collector\Exception\UnexpectedScalarException;
 
+/**
+ * This is a default implementation of the data provider. It provides the
+ * data for various system services. You should not instantiate this class
+ * explicitely, as it does not provide any way to inject the data to it.
+ *
+ * @author Tomasz Jędrzejewski
+ * @copyright Invenzzia Group <http://www.invenzzia.org/> and contributors.
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
+ */
 class Provider implements ProviderInterface
 {
+	/**
+	 * The stored data, in a form of tree.
+	 * @var array
+	 */
 	protected $data;
 
+	/**
+	 * @throws \Opl\Collector\Exception\UnexpectedScalarException
+	 * @see ProviderInterface
+	 */
 	public function get($key, $errorReporting = self::THROW_EXCEPTION)
 	{
 		$path = $this->processKey($key);
@@ -56,11 +73,25 @@ class Provider implements ProviderInterface
 		}
 	} // end get();
 
+	/**
+	 * An internal method for translating the key to the parts.
+	 * 
+	 * @param string $key The value key.
+	 * @return array
+	 */
 	protected function processKey($key)
 	{
 		return explode('.', $key);
 	} // end processKey();
 
+	/**
+	 * Finds a key in the array, and returns a reference to it, so that it could
+	 * be modified.
+	 *
+	 * @throws \Opl\Collector\Exception\UnexpectedScalarException
+	 * @param string $key The value key.
+	 * @return array
+	 */
 	protected function &findKey($key)
 	{
 		$path = $this->processKey($key);

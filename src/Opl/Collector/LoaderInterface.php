@@ -11,7 +11,18 @@
  */
 namespace Opl\Collector;
 
+/**
+ * Loaders load the data to the collector.
+ *
+ * @author Tomasz Jędrzejewski
+ * @copyright Invenzzia Group <http://www.invenzzia.org/> and contributors.
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
+ */
 interface LoaderInterface
 {
+	/**
+	 * Returns the imported data in a form of an array.
+	 * @return array
+	 */
 	public function import();
 } // end LoaderInterface;
