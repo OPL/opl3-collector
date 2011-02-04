@@ -1,0 +1,48 @@
+<?php
+/*
+ *  OPEN POWER LIBS <http://www.invenzzia.org>
+ *
+ * This file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE. It is also available through
+ * WWW at this URL: <http://www.invenzzia.org/license/new-bsd>
+ *
+ * Copyright (c) Invenzzia Group <http://www.invenzzia.org>
+ * and other contributors. See website for details.
+ */
+namespace Opl\Collector\Visit;
+use Opl\Collector\LoaderInterface;
+
+/**
+ * This collector collects the information about the connection to
+ * the web server.
+ *
+ * @author Tomasz Jędrzejewski
+ * @copyright Invenzzia Group <http://www.invenzzia.org/> and contributors.
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
+ */
+class ConnectionLoader implements LoaderInterface
+{
+	/**
+	 * @see LoaderInterface
+	 */
+	public function import()
+	{
+		$recognized = array('HTTPS' => 'https', 'HTTP' => 'http', 'WAP' => 'wap');
+		$protocol = 'unknown';
+		foreach($recognized as $lookFor => $string)
+		{
+			if(strpos($_SERVER['SERVER_PROTOCOL'], $lookFor) !== false)
+			{
+				$protocol = $string;
+				break;
+			}
+		}
+
+		return array(
+			'port' => $_SERVER['SERVER_PORT'],
+			'secure' => $_SERVER['SERVER_PORT'] == 443,
+			'method' => $_SERVER['REQUEST_METHOD'],
+			'protocol' => $protocol
+		);
+	} // end import();
+} // end ConnectionLoader;
