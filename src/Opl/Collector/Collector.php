@@ -28,7 +28,7 @@ class Collector extends Provider
 	const ROOT = null;
 
 	protected $cache;
-	protected $cacheLoaded = true;
+	protected $cacheLoaded = false;
 	protected $cacheKey;
 
 	/**
@@ -47,8 +47,11 @@ class Collector extends Provider
 
 			if(null === $this->data)
 			{
-				$this->cacheLoaded = false;
 				$this->cache = array();
+			}
+			else
+			{
+				$this->cacheLoaded = true;
 			}
 			$this->cacheKey = $cacheKey;
 		}
