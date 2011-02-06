@@ -34,5 +34,77 @@ class CollectorTest extends \PHPUnit_Framework_TestCase
 
 		$collector = new Collector($cacheMock);
 		$this->assertFalse($collector->isCached());
-	} // end testCacheNotSet();
+	} // end testCacheSetButMissed();
+
+	public function testCacheSetAndHit()
+	{
+		$cacheMock = $this->getMockForAbstractClass('\\Opl\\Cache\\Cache', array(0 => array('prefix' => 'mock', 'lifetime' => 100)));
+		$cacheMock->expects($this->once())
+			->method('get')
+			->with($this->equalTo('collector'))
+			->will($this->returnValue(array('foo' => 'bar')));
+
+		$collector = new Collector($cacheMock);
+		$this->assertTrue($collector->isCached());
+	} // end testCacheSetAndHit();
+
+	public function testLoadFromArrayAsRootDoesRecursiveMerging()
+	{
+		$collector = new Collector();
+		$collector->loadFromArray(Collector::ROOT, array(
+			'foo' => 'foo value',
+			'bar' => array(
+				'joe' => 'joe value'
+			)
+		));
+
+		$this->assertEquals('foo value', $collector->get('foo'));
+		$this->assertEquals('joe value', $collector->get('bar.joe'));
+		$this->assertSame(null, $collector->get('goo', Collector::THROW_NULL));
+		$this->assertSame(null, $collector->get('bar.hoo', Collector::THROW_NULL));
+
+		$collector->loadFromArray(Collector::ROOT, array(
+			'goo' => 'goo value',
+			'bar' => array(
+				'hoo' => 'hoo value'
+			)
+		));
+
+		$this->assertEquals('foo value', $collector->get('foo'));
+		$this->assertEquals('joe value', $collector->get('bar.joe'));
+		$this->assertEquals('goo value', $collector->get('goo'));
+		$this->assertEquals('hoo value', $collector->get('bar.hoo'));
+	} // end testLoadFromArrayAsRootDoesRecursiveMerging();
+
+	public function testLoadFromArrayAsNestedDoesRecursiveMerging()
+	{
+		$collector = new Collector();
+		$collector->loadFromArray(Collector::ROOT, array(
+			'foo' => 'foo value',
+			'bar' => array(
+				'joe' => 'joe value'
+			)
+		));
+
+		$this->assertEquals('foo value', $collector->get('foo'));
+		$this->assertEquals('joe value', $collector->get('bar.joe'));
+		$this->assertSame(null, $collector->get('goo', Collector::THROW_NULL));
+		$this->assertSame(null, $collector->get('bar.hoo', Collector::THROW_NULL));
+		$this->assertSame(null, $collector->get('bar.goo', Collector::THROW_NULL));
+		$this->assertSame(null, $collector->get('bar.bar.hoo', Collector::THROW_NULL));
+
+		$collector->loadFromArray('bar', array(
+			'goo' => 'goo value',
+			'bar' => array(
+				'hoo' => 'hoo value'
+			)
+		));
+
+		$this->assertEquals('foo value', $collector->get('foo'));
+		$this->assertEquals('joe value', $collector->get('bar.joe'));
+		$this->assertSame(null, $collector->get('goo', Collector::THROW_NULL));
+		$this->assertSame(null, $collector->get('bar.hoo', Collector::THROW_NULL));
+		$this->assertEquals('goo value', $collector->get('bar.goo'));
+		$this->assertEquals('hoo value', $collector->get('bar.bar.hoo'));
+	} // end testLoadFromArrayAsNestedDoesRecursiveMerging();
 } // end CollectorTest;
