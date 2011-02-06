@@ -47,13 +47,17 @@ class Collector extends Provider
 
 			if(null === $this->data)
 			{
-				$this->cache = array();
+				$this->data = array();
 			}
 			else
 			{
 				$this->cacheLoaded = true;
 			}
 			$this->cacheKey = $cacheKey;
+		}
+		else
+		{
+			$this->data = array();
 		}
 	} // end __construct();
 
