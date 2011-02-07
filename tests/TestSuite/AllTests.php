@@ -17,6 +17,7 @@ class AllTests extends \PHPUnit_Framework_TestSuite
 		$suite->addTestSuite('TestSuite\\ProviderTest');
 		$suite->addTestSuite('TestSuite\\CollectorTest');
 		$suite->addTestSuite('TestSuite\\Visit\\AllTests');
+		$suite->addTestSuite('TestSuite\\Configuration\\AllTests');
 
 		return $suite;
 	} // end suite();
