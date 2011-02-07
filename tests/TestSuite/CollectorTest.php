@@ -179,4 +179,29 @@ class CollectorTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('goo value', $collector->get('bar.goo'));
 		$this->assertEquals('hoo value', $collector->get('bar.bar.hoo'));
 	} // end testLoadFromLoaderAsNestedDoesRecursiveMerging();
+
+	/**
+	 * @expectedException BadMethodCallException
+	 */
+	public function testSaveThrowsExceptionWhenNoCacheIsInstalled()
+	{
+		$collector = new Collector();
+		$collector->save();
+	} // end testSaveThrowsExceptionWhenNoCacheIsInstalled();
+
+	public function testSaveSavesTheDataInTheCache()
+	{
+		$cacheMock = $this->getMockForAbstractClass('\\Opl\\Cache\\Cache', array(0 => array('prefix' => 'mock', 'lifetime' => 100)));
+		$cacheMock->expects($this->once())
+			->method('set')
+			->with(
+				$this->equalTo('collector'),
+				$this->equalTo(array('foo' => 'bar'))
+			)
+			->will($this->returnValue(true));
+
+		$collector = new Collector($cacheMock);
+		$collector->loadFromArray(Collector::ROOT, array('foo' => 'bar'));
+		$collector->save();
+	} // end testSaveSavesTheDataInTheCache();
 } // end CollectorTest;
