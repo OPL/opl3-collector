@@ -107,4 +107,76 @@ class CollectorTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('goo value', $collector->get('bar.goo'));
 		$this->assertEquals('hoo value', $collector->get('bar.bar.hoo'));
 	} // end testLoadFromArrayAsNestedDoesRecursiveMerging();
+
+	public function testLoadFromLoaderAsRootDoesRecursiveMerging()
+	{
+		$loaderMock = $this->getMock('\\Opl\\Collector\\LoaderInterface');
+		$loaderMock->expects($this->once())
+			->method('import')
+			->will($this->returnValue(array(
+				'goo' => 'goo value',
+				'bar' => array(
+					'hoo' => 'hoo value'
+				)
+			)
+		));
+
+		$collector = new Collector();
+		$collector->loadFromArray(Collector::ROOT, array(
+			'foo' => 'foo value',
+			'bar' => array(
+				'joe' => 'joe value'
+			)
+		));
+
+		$this->assertEquals('foo value', $collector->get('foo'));
+		$this->assertEquals('joe value', $collector->get('bar.joe'));
+		$this->assertSame(null, $collector->get('goo', Collector::THROW_NULL));
+		$this->assertSame(null, $collector->get('bar.hoo', Collector::THROW_NULL));
+
+		$collector->loadFromLoader(Collector::ROOT, $loaderMock);
+
+		$this->assertEquals('foo value', $collector->get('foo'));
+		$this->assertEquals('joe value', $collector->get('bar.joe'));
+		$this->assertEquals('goo value', $collector->get('goo'));
+		$this->assertEquals('hoo value', $collector->get('bar.hoo'));
+	} // end testLoadFromLoaderAsRootDoesRecursiveMerging();
+
+	public function testLoadFromLoaderAsNestedDoesRecursiveMerging()
+	{
+		$loaderMock = $this->getMock('\\Opl\\Collector\\LoaderInterface');
+		$loaderMock->expects($this->once())
+			->method('import')
+			->will($this->returnValue(array(
+				'goo' => 'goo value',
+				'bar' => array(
+					'hoo' => 'hoo value'
+				)
+			)
+		));
+
+		$collector = new Collector();
+		$collector->loadFromArray(Collector::ROOT, array(
+			'foo' => 'foo value',
+			'bar' => array(
+				'joe' => 'joe value'
+			)
+		));
+
+		$this->assertEquals('foo value', $collector->get('foo'));
+		$this->assertEquals('joe value', $collector->get('bar.joe'));
+		$this->assertSame(null, $collector->get('goo', Collector::THROW_NULL));
+		$this->assertSame(null, $collector->get('bar.hoo', Collector::THROW_NULL));
+		$this->assertSame(null, $collector->get('bar.goo', Collector::THROW_NULL));
+		$this->assertSame(null, $collector->get('bar.bar.hoo', Collector::THROW_NULL));
+
+		$collector->loadFromLoader('bar', $loaderMock);
+
+		$this->assertEquals('foo value', $collector->get('foo'));
+		$this->assertEquals('joe value', $collector->get('bar.joe'));
+		$this->assertSame(null, $collector->get('goo', Collector::THROW_NULL));
+		$this->assertSame(null, $collector->get('bar.hoo', Collector::THROW_NULL));
+		$this->assertEquals('goo value', $collector->get('bar.goo'));
+		$this->assertEquals('hoo value', $collector->get('bar.bar.hoo'));
+	} // end testLoadFromLoaderAsNestedDoesRecursiveMerging();
 } // end CollectorTest;
