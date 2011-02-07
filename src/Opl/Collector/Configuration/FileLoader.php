@@ -48,7 +48,8 @@ abstract class FileLoader implements LoaderInterface
 		}
 		foreach($paths as &$path)
 		{
-			if($path[strlen($path) - 1] != DIRECTORY_SEPARATOR)
+			$length = strlen($path);
+			if(0 == $length || DIRECTORY_SEPARATOR != $path[$length - 1])
 			{
 				$path .= DIRECTORY_SEPARATOR;
 			}
