@@ -96,7 +96,7 @@ class Collector extends Provider
 	 */
 	public function loadFromLoader($path, LoaderInterface $loader)
 	{
-		$data = $loader->load();
+		$data = $loader->import();
 		if(null === $path)
 		{
 			if(is_array($data))
