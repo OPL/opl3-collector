@@ -106,7 +106,7 @@ class Collector extends Provider
 			}
 			return false;
 		}
-		$partial = $this->findKey($path);
+		$partial = &$this->findKey($path);
 		if(is_array($data))
 		{
 			$partial = array_merge_recursive($partial, $data);
@@ -131,7 +131,7 @@ class Collector extends Provider
 			$this->data = array_merge_recursive($this->data, $array);
 			return true;
 		}
-		$partial = $this->findKey($path);
+		$partial = &$this->findKey($path);
 		$partial = array_merge_recursive($partial, $array);
 
 		return true;
