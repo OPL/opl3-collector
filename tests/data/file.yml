@@ -1,0 +1,8 @@
+## YAML Template.
+---
+foo:
+  bar:
+    joe: value 1
+    goo: value 2
+  hoo: value 3
+loo: value 4
