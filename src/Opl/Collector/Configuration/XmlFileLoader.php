@@ -38,13 +38,13 @@ class XmlFileLoader extends FileLoader
 
 		$queue = new SplQueue;
 		$opts = array();
-		$root = $this->_groupFactory($opts, $data->group, $queue);
+		$root = $this->_groupFactory($opts, $data, $queue);
 		
 
 		while($queue->count() > 0)
 		{
 			list($localRoot, $pageDesc) = $queue->dequeue();
-			$this->_groupFactory($localRoot, $data, $queue);
+			$this->_groupFactory($localRoot, $pageDesc, $queue);
 		}
 
 		return $opts;
@@ -70,6 +70,7 @@ class XmlFileLoader extends FileLoader
 					{
 						$queue->enqueue(array(&$root[$name], $subElement));
 					}
+					break;
 				default:
 					throw new RuntimeException('Cannot load an XML file: unknown element: \''.$xmlElement->getName().'\'');
 			}
