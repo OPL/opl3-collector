@@ -15,8 +15,18 @@ use RuntimeException;
 use SplQueue;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Loads the collection data from an XML file.
+ *
+ * @author Tomasz Jędrzejewski
+ * @copyright Invenzzia Group <http://www.invenzzia.org/> and contributors.
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
+ */
 class XmlFileLoader extends FileLoader
 {
+	/**
+	 * @see LoaderInterface
+	 */
 	public function import()
 	{
 		if(null === $this->currentFile)
@@ -24,7 +34,7 @@ class XmlFileLoader extends FileLoader
 			throw new BadMethodCallException('Cannot load an XML file: no file specified');
 		}
 
-		$data = \simplexml_load_file($this->findFile($this->_currentFile));
+		$data = \simplexml_load_file($this->findFile($this->currentFile));
 
 		$queue = new SplQueue;
 		$opts = array();
