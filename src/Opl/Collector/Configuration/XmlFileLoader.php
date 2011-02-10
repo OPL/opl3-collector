@@ -39,18 +39,17 @@ class XmlFileLoader extends FileLoader
 		$queue = new SplQueue;
 		$opts = array();
 		$root = $this->_groupFactory($opts, $data, $queue);
-		
 
 		while($queue->count() > 0)
 		{
-			list($localRoot, $pageDesc) = $queue->dequeue();
-			$this->_groupFactory($localRoot, $pageDesc, $queue);
+			$item = $queue->dequeue();
+			$this->_groupFactory($item[0], $item[1], $queue);
 		}
 
 		return $opts;
 	} // end import();
 
-	protected function _groupFactory($root, $data, SplQueue $queue)
+	protected function _groupFactory(&$root, $data, SplQueue $queue)
 	{
 		foreach($data as $xmlElement)
 		{
@@ -66,10 +65,7 @@ class XmlFileLoader extends FileLoader
 					break;
 				case 'group':
 					$root[$name] = array();
-					foreach($xmlElement as $subElement)
-					{
-						$queue->enqueue(array(&$root[$name], $subElement));
-					}
+					$queue->enqueue(array(&$root[$name], $xmlElement));
 					break;
 				default:
 					throw new RuntimeException('Cannot load an XML file: unknown element: \''.$xmlElement->getName().'\'');
