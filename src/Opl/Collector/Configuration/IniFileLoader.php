@@ -11,9 +11,20 @@
  */
 namespace Opl\Collector\Configuration;
 use BadMethodCallException;
+use RuntimeException;
 
+/**
+ * Loads the collection data from an INI file.
+ *
+ * @author Tomasz Jędrzejewski
+ * @copyright Invenzzia Group <http://www.invenzzia.org/> and contributors.
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
+ */
 class IniFileLoader extends FileLoader
 {
+	/**
+	 * @see LoaderInterface
+	 */
 	public function import()
 	{
 		if(null === $this->currentFile)
@@ -21,6 +32,44 @@ class IniFileLoader extends FileLoader
 			throw new BadMethodCallException('Cannot load an INI file: no file specified');
 		}
 
-		return array();
+		$ini = parse_ini_file($this->currentFile);
+
+		if(false === $ini)
+		{
+			throw new RuntimeException($this->currentFile.' is not a valid INI file.');
+		}
+
+		$data = array();
+		foreach($ini as $name => $value)
+		{
+			$path = explode('.', $name);
+			$cnt = sizeof($path);
+			$item = &$data;
+			for($i = 0; $i < $cnt; $i++)
+			{
+				if(!isset($item[$path[$i]]))
+				{
+					if($i + 1 == $cnt)
+					{
+						$item[$path[$i]] = $value;
+					}
+					else
+					{
+						$item[$path[$i]] = array();
+						$item = &$item[$path[$i]];
+					}
+				}
+				elseif(!is_array($item[$path[$i]]))
+				{
+					throw new RuntimeException('Cannot treat the scalar value as a collection in key: '.$name);
+				}
+				else
+				{
+					$item = &$item[$path[$i]];
+				}
+			}
+		}
+
+		return $data;
 	} // end import();
 } // end IniFileLoader;
