@@ -11,8 +11,8 @@
  */
 namespace Opl\Collector\Configuration;
 use BadMethodCallException;
-use RuntimeException;
 use SplQueue;
+use Opl\Collector\Exception\XmlValidityException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -55,7 +55,7 @@ class XmlFileLoader extends FileLoader
 		{
 			if(!isset($xmlElement['name']))
 			{
-				throw new RuntimeException('Cannot load an XML file: the \''.$xmlElement->getName().'\' element has no \'name\' attribute.');
+				throw new XmlValidityException('Cannot load an XML file: the \''.$xmlElement->getName().'\' element has no \'name\' attribute.');
 			}
 			$name = (string)$xmlElement['name'];
 			switch($xmlElement->getName())
@@ -68,7 +68,7 @@ class XmlFileLoader extends FileLoader
 					$queue->enqueue(array(&$root[$name], $xmlElement));
 					break;
 				default:
-					throw new RuntimeException('Cannot load an XML file: unknown element: \''.$xmlElement->getName().'\'');
+					throw new XmlValidityException('Cannot load an XML file: unknown element: \''.$xmlElement->getName().'\'');
 			}
 		}
 	} // end _groupFactory();
