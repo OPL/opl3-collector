@@ -32,7 +32,7 @@ class IniFileLoader extends FileLoader
 			throw new BadMethodCallException('Cannot load an INI file: no file specified');
 		}
 
-		$ini = parse_ini_file($this->currentFile);
+		$ini = @parse_ini_file($this->findFile($this->currentFile));
 
 		if(false === $ini)
 		{
