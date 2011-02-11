@@ -15,9 +15,9 @@ class AllTests extends \PHPUnit_Framework_TestSuite
 		$suite = new AllTests('TestSuite\\Configuration');
 
 		$suite->addTestSuite('TestSuite\\Configuration\\FileLoaderTest');
-	//	$suite->addTestSuite('TestSuite\\Configuration\\IniFileLoaderTest');
-	//	$suite->addTestSuite('TestSuite\\Configuration\\XmlFileLoaderTest');
-	//	$suite->addTestSuite('TestSuite\\Configuration\\YamlFileLoaderTest');
+		$suite->addTestSuite('TestSuite\\Configuration\\IniFileLoaderTest');
+		$suite->addTestSuite('TestSuite\\Configuration\\XmlFileLoaderTest');
+		$suite->addTestSuite('TestSuite\\Configuration\\YamlFileLoaderTest');
 
 		return $suite;
 	} // end suite();
