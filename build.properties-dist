@@ -2,8 +2,8 @@
 project.name=Open Power Collector
 project.filename=opl-collector
 project.version=3.0.1
-project.stability.release=devel
-project.stability.api=devel
+project.stability.release=beta
+project.stability.api=beta
 project.license=New BSD
 project.license-url=http://www.invenzzia.org/license/new-bsd
 project.copyright-year=2011
