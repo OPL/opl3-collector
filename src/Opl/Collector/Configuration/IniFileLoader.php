@@ -65,6 +65,10 @@ class IniFileLoader extends FileLoader
 				}
 				else
 				{
+					if($i + 1 == $cnt)
+					{
+						throw new LoaderException('Cannot treat the collection as a scalar value in key: '.$name);
+					}
 					$item = &$item[$path[$i]];
 				}
 			}
