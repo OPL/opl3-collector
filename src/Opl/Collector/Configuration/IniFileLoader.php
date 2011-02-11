@@ -11,7 +11,7 @@
  */
 namespace Opl\Collector\Configuration;
 use BadMethodCallException;
-use RuntimeException;
+use Opl\Collector\Exception\LoaderException;
 
 /**
  * Loads the collection data from an INI file.
@@ -36,7 +36,7 @@ class IniFileLoader extends FileLoader
 
 		if(false === $ini)
 		{
-			throw new RuntimeException($this->currentFile.' is not a valid INI file.');
+			throw new LoaderException($this->currentFile.' is not a valid INI file.');
 		}
 
 		$data = array();
@@ -61,7 +61,7 @@ class IniFileLoader extends FileLoader
 				}
 				elseif(!is_array($item[$path[$i]]))
 				{
-					throw new RuntimeException('Cannot treat the scalar value as a collection in key: '.$name);
+					throw new LoaderException('Cannot treat the scalar value as a collection in key: '.$name);
 				}
 				else
 				{
