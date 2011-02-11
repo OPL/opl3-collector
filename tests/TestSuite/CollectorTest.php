@@ -204,4 +204,22 @@ class CollectorTest extends \PHPUnit_Framework_TestCase
 		$collector->loadFromArray(Collector::ROOT, array('foo' => 'bar'));
 		$collector->save();
 	} // end testSaveSavesTheDataInTheCache();
+
+	public function testLoadFromLoaderReturnsFalseIfTheLoaderDoesNotReturnArray()
+	{
+		$loaderMock1 = $this->getMock('\\Opl\\Collector\\LoaderInterface');
+		$loaderMock1->expects($this->once())
+			->method('import')
+			->will($this->returnValue(42));
+
+		$loaderMock2 = $this->getMock('\\Opl\\Collector\\LoaderInterface');
+		$loaderMock2->expects($this->once())
+			->method('import')
+			->will($this->returnValue(42));
+
+		$collector = new Collector();
+		$collector->loadFromArray(Collector::ROOT, array('foo' => array('bar' => 10)));
+		$this->assertFalse($collector->loadFromLoader(Collector::ROOT, $loaderMock1));
+		$this->assertFalse($collector->loadFromLoader('foo', $loaderMock2));
+	} // end testLoadFromLoaderReturnsFalseIfTheLoaderDoesNotReturnArray();
 } // end CollectorTest;
