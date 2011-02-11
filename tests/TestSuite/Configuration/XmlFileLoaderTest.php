@@ -37,4 +37,36 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 			$this->fail('Exception '.get_class($exception).': '.$exception->getMessage());
 		}
 	} // end testLoadingValidXmlFile();
+
+	/**
+	 * @expectedException BadMethodCallException
+	 */
+	public function testImportThrowsExceptionWhenNoFileDefined()
+	{
+		$loader = new XmlFileLoader('./data/');
+		$collector = new Collector();
+		$collector->loadFromLoader(Collector::ROOT, $loader);
+	} // end testImportThrowsExceptionWhenNoFileDefined();
+
+	/**
+	 * @expectedException \Opl\Collector\Exception\XmlValidityException
+	 */
+	public function testImportThrowsExceptionWhenNameIsNotDefined()
+	{
+		$loader = new XmlFileLoader('./data/');
+		$loader->setFile('invalid1.xml');
+		$collector = new Collector();
+		$collector->loadFromLoader(Collector::ROOT, $loader);
+	} // end testImportThrowsExceptionWhenNameIsNotDefined();
+
+	/**
+	 * @expectedException \Opl\Collector\Exception\XmlValidityException
+	 */
+	public function testImportThrowsExceptionOnUnknownTag()
+	{
+		$loader = new XmlFileLoader('./data/');
+		$loader->setFile('invalid2.xml');
+		$collector = new Collector();
+		$collector->loadFromLoader(Collector::ROOT, $loader);
+	} // end testImportThrowsExceptionOnUnknownTag();
 } // end XmlFileLoaderTest;
