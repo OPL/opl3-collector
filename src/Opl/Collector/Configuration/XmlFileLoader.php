@@ -11,12 +11,22 @@
  */
 namespace Opl\Collector\Configuration;
 use BadMethodCallException;
-use RuntimeException;
 use SplQueue;
+use Opl\Collector\Exception\XmlValidityException;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Loads the collection data from an XML file.
+ *
+ * @author Tomasz Jędrzejewski
+ * @copyright Invenzzia Group <http://www.invenzzia.org/> and contributors.
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
+ */
 class XmlFileLoader extends FileLoader
 {
+	/**
+	 * @see LoaderInterface
+	 */
 	public function import()
 	{
 		if(null === $this->currentFile)
@@ -24,29 +34,35 @@ class XmlFileLoader extends FileLoader
 			throw new BadMethodCallException('Cannot load an XML file: no file specified');
 		}
 
-		$data = \simplexml_load_file($this->findFile($this->_currentFile));
+		$data = \simplexml_load_file($this->findFile($this->currentFile));
 
 		$queue = new SplQueue;
 		$opts = array();
-		$root = $this->_groupFactory($opts, $data->group, $queue);
-		
+		$root = $this->_groupFactory($opts, $data, $queue);
 
 		while($queue->count() > 0)
 		{
-			list($localRoot, $pageDesc) = $queue->dequeue();
-			$this->_groupFactory($localRoot, $data, $queue);
+			$item = $queue->dequeue();
+			$this->_groupFactory($item[0], $item[1], $queue);
 		}
 
 		return $opts;
 	} // end import();
 
-	protected function _groupFactory($root, $data, SplQueue $queue)
+	/**
+	 * Imports a single option group recursively from the XML file.
+	 *
+	 * @param SimpleXMLElement $root The parent element of the scanned nodes
+	 * @param list $data The list of the group nodes
+	 * @param SplQueue $queue The queue used for the recursive processing
+	 */
+	protected function _groupFactory(&$root, $data, SplQueue $queue)
 	{
 		foreach($data as $xmlElement)
 		{
 			if(!isset($xmlElement['name']))
 			{
-				throw new RuntimeException('Cannot load an XML file: the \''.$xmlElement->getName().'\' element has no \'name\' attribute.');
+				throw new XmlValidityException('Cannot load an XML file: the \''.$xmlElement->getName().'\' element has no \'name\' attribute.');
 			}
 			$name = (string)$xmlElement['name'];
 			switch($xmlElement->getName())
@@ -56,12 +72,10 @@ class XmlFileLoader extends FileLoader
 					break;
 				case 'group':
 					$root[$name] = array();
-					foreach($xmlElement as $subElement)
-					{
-						$queue->enqueue(array(&$root[$name], $subElement));
-					}
+					$queue->enqueue(array(&$root[$name], $xmlElement));
+					break;
 				default:
-					throw new RuntimeException('Cannot load an XML file: unknown element: \''.$xmlElement->getName().'\'');
+					throw new XmlValidityException('Cannot load an XML file: unknown element: \''.$xmlElement->getName().'\'');
 			}
 		}
 	} // end _groupFactory();

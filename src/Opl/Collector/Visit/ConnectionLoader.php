@@ -40,7 +40,7 @@ class ConnectionLoader implements LoaderInterface
 
 		return array(
 			'port' => $_SERVER['SERVER_PORT'],
-			'secure' => $_SERVER['SERVER_PORT'] == 443,
+			'isSecure' => $_SERVER['SERVER_PORT'] == 443,
 			'method' => $_SERVER['REQUEST_METHOD'],
 			'protocol' => $protocol
 		);

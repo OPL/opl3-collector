@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+ An XML Schema for the XML collection files.
+
+ Author: Tomasz Jędrzejewski
+ Date: 2011-02-10
+ Copyright: Invenzzia Group 2011 <http://www.invenzzia.org/>
+ License: New BSD License <http://www.invenzzia.org/license/new-bsd>
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://xml.invenzzia.org/opl/collection"
+xmlns="http://xml.invenzzia.org/opl/collection"
+elementFormDefault="qualified">
+	<xs:complexType name="itemType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:complexType name="groupContentType">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="group" type="groupContentType"/>
+			<xs:element name="item" type="itemType"/>
+		</xs:choice>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+
+	<xs:element name="group">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="group" type="groupContentType"/>
+				<xs:element name="item" type="itemType"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

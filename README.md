@@ -1,4 +1,4 @@
-Open Power Collector 3.0.1-dev
+Open Power Collector 3.0.1.0
 =============================
 
 The library provides a universal static data collection interface that can

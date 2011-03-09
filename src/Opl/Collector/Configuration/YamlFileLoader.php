@@ -13,8 +13,18 @@ namespace Opl\Collector\Configuration;
 use BadMethodCallException;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Loads the collection data from a YAML file.
+ *
+ * @author Tomasz Jędrzejewski
+ * @copyright Invenzzia Group <http://www.invenzzia.org/> and contributors.
+ * @license http://www.invenzzia.org/license/new-bsd New BSD License
+ */
 class YamlFileLoader extends FileLoader
 {
+	/**
+	 * @see LoaderInterface
+	 */
 	public function import()
 	{
 		if(null === $this->currentFile)

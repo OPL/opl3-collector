@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<group xmlns="http://xml.invenzzia.org/opl/collection" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="../../xml/collection.xsd">
+	<group name="foo">
+		<group name="bar">
+			<item name="joe">value 1</item>
+			<item name="goo">value 2</item>
+		</group>
+		<item name="hoo">value 3</item>
+	</group>
+	<item name="loo">value 4</item>
+</group>
