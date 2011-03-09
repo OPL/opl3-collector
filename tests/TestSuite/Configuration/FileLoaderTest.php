@@ -49,4 +49,28 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 		$fileLoader->setFile('bar.txt');
 		$this->assertEquals('bar.txt', $fileLoader->getFile());
 	} // end testSettingFilename();
+
+	public function testGetFileAndGetIdentifierReturnTheSameThing()
+	{
+		$fileLoader = new FileLoaderMock(array('./foo/', ''));
+		$fileLoader->setFile('abcdef.txt');
+
+		$this->assertEquals('abcdef.txt', $fileLoader->getFile());
+		$this->assertEquals('abcdef.txt', $fileLoader->getIdentifier());
+	} // end testGetFileAndGetIdentifierReturnTheSameThing();
+
+	public function testFindFileScansTheListOfDirectories()
+	{
+		$fileLoader = new FileLoaderMock(array('./data2/', './data/'));
+		$this->assertEquals('./data/file.xml', $fileLoader->findFile('file.xml'));
+	} // end testFindFileScansTheListOfDirectories();
+
+	/**
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testFindFileThrowsAnExceptionIfTheFileIsNotFound()
+	{
+		$fileLoader = new FileLoaderMock(array('./data2/', './data3/'));
+		$fileLoader->findFile('file.xml');
+	} // end testFindFileThrowsAnExceptionIfTheFileIsNotFound();
 } // end FileLoaderTest;
