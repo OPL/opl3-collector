@@ -41,7 +41,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
 			<file baseinstalldir="/" name="Opl/Collector/Configuration/XmlFileLoader.php" role="php" />
 			<file baseinstalldir="/" name="Opl/Collector/Exception/InvalidKeyException.php" role="php" />
 			<file baseinstalldir="/" name="Opl/Collector/Exception/UnexpectedScalarException.php" role="php" />
-			<file baseinstalldir="/" name="Opl/Collector/Exception/LoaderException.php" role="php" /><dir name="">
+			<file baseinstalldir="/" name="Opl/Collector/Exception/LoaderException.php" role="php" />
 			<file baseinstalldir="/" name="Opl/Collector/Exception/XmlValidityException.php" role="php" />
 			<file baseinstalldir="/" name="Opl/Collector/Visit/HostLoader.php" role="php" />
 			<file baseinstalldir="/" name="Opl/Collector/Visit/ConnectionLoader.php" role="php" />
