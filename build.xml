@@ -35,6 +35,13 @@
 				<include name="**/*.php" />
 			</fileset>
 		</copy>
+		<copy todir="${project.directory.build}/xml">
+			<fileset dir="./xml">
+				<include name="**/*.xml" />
+				<include name="**/*.xsd" />
+				<include name="**/*.xls" />
+			</fileset>
+		</copy>
 		<copy todir="${project.directory.build}/tests">
 			<fileset dir="./tests">
 				<include name="**" />
