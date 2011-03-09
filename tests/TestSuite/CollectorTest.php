@@ -180,6 +180,44 @@ class CollectorTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('hoo value', $collector->get('bar.bar.hoo'));
 	} // end testLoadFromLoaderAsNestedDoesRecursiveMerging();
 
+	public function testLoadFromArrayNestedAddsUnexistingKeys()
+	{
+		$collector = new Collector();
+		$collector->loadFromArray('bar.hoo.loo', array(
+			'foo' => 'foo value',
+			'bar' => array(
+				'joe' => 'joe value'
+			)
+		));
+	} // end testLoadFromArrayNestedAddsUnexistingKeys();
+
+	/**
+	 * @expectedException Opl\Collector\Exception\UnexpectedScalarException
+	 */
+	public function testLoadFromLoaderNestedFailsAtScalarDereferencing()
+	{
+		$loaderMock = $this->getMock('\\Opl\\Collector\\LoaderInterface');
+		$loaderMock->expects($this->once())
+			->method('import')
+			->will($this->returnValue(array(
+				'goo' => 'goo value',
+				'bar' => array(
+					'hoo' => 'hoo value'
+				)
+			)
+		));
+
+		$collector = new Collector();
+		$collector->loadFromArray(Collector::ROOT, array(
+			'foo' => 'foo value',
+			'bar' => array(
+				'joe' => 'joe value'
+			)
+		));
+
+		$collector->loadFromLoader('bar.joe.loo', $loaderMock);
+	} // end testLoadFromLoaderNestedNoticesUnexpectedScalars();
+
 	/**
 	 * @expectedException BadMethodCallException
 	 */
