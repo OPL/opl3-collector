@@ -26,7 +26,7 @@ class ConnectionLoaderTest extends \PHPUnit_Framework_TestCase
 		$collector->loadFromLoader(Collector::ROOT, new ConnectionLoader());
 
 		$this->assertEquals(80, $collector->get('port'));
-		$this->assertFalse($collector->get('secure'));
+		$this->assertFalse($collector->get('isSecure'));
 		$this->assertEquals('GET', $collector->get('method'));
 		$this->assertEquals('http', $collector->get('protocol'));
 	} // end testSettingPort80();
@@ -41,7 +41,7 @@ class ConnectionLoaderTest extends \PHPUnit_Framework_TestCase
 		$collector->loadFromLoader(Collector::ROOT, new ConnectionLoader());
 
 		$this->assertEquals(443, $collector->get('port'));
-		$this->assertTrue($collector->get('secure'));
+		$this->assertTrue($collector->get('isSecure'));
 		$this->assertEquals('POST', $collector->get('method'));
 		$this->assertEquals('https', $collector->get('protocol'));
 	} // end testSettingPort443();
