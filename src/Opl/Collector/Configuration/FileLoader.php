@@ -84,7 +84,7 @@ abstract class FileLoader implements LoaderInterface
 	 */
 	public function getIdentifier()
 	{
-		return $this->_currentFile;
+		return $this->currentFile;
 	} // end getIdentifier();
 
 	/**
