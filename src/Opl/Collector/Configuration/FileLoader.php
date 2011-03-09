@@ -58,13 +58,17 @@ abstract class FileLoader implements LoaderInterface
 	} // end __construct();
 
 	/**
-	 * Sets the file name, which the metadata will be loaded from.
+	 * Sets the file name, which the metadata will be loaded from. Implements
+	 * the fluent interface.
 	 *
 	 * @param string $file The file with the metadata.
+	 * @return FileLoader
 	 */
 	public function setFile($file)
 	{
 		$this->currentFile = $file;
+
+		return $this;
 	} // end setFile();
 
 	/**
