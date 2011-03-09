@@ -49,6 +49,13 @@ class XmlFileLoader extends FileLoader
 		return $opts;
 	} // end import();
 
+	/**
+	 * Imports a single option group recursively from the XML file.
+	 *
+	 * @param SimpleXMLElement $root The parent element of the scanned nodes
+	 * @param list $data The list of the group nodes
+	 * @param SplQueue $queue The queue used for the recursive processing
+	 */
 	protected function _groupFactory(&$root, $data, SplQueue $queue)
 	{
 		foreach($data as $xmlElement)
