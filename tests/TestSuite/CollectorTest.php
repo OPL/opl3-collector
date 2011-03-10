@@ -18,36 +18,6 @@ use Opl\Collector\Collector;
  */
 class CollectorTest extends \PHPUnit_Framework_TestCase
 {
-	public function testCacheNotSet()
-	{
-		$collector = new Collector();
-		$this->assertFalse($collector->isCached());
-	} // end testCacheNotSet();
-
-	public function testCacheSetButMissed()
-	{
-		$cacheMock = $this->getMockForAbstractClass('\\Opl\\Cache\\Cache', array(0 => array('prefix' => 'mock', 'lifetime' => 100)));
-		$cacheMock->expects($this->once())
-			->method('get')
-			->with($this->equalTo('collector'))
-			->will($this->returnValue(null));
-
-		$collector = new Collector($cacheMock);
-		$this->assertFalse($collector->isCached());
-	} // end testCacheSetButMissed();
-
-	public function testCacheSetAndHit()
-	{
-		$cacheMock = $this->getMockForAbstractClass('\\Opl\\Cache\\Cache', array(0 => array('prefix' => 'mock', 'lifetime' => 100)));
-		$cacheMock->expects($this->once())
-			->method('get')
-			->with($this->equalTo('collector'))
-			->will($this->returnValue(array('foo' => 'bar')));
-
-		$collector = new Collector($cacheMock);
-		$this->assertTrue($collector->isCached());
-	} // end testCacheSetAndHit();
-
 	public function testLoadFromArrayAsRootDoesRecursiveMerging()
 	{
 		$collector = new Collector();
@@ -218,31 +188,6 @@ class CollectorTest extends \PHPUnit_Framework_TestCase
 		$collector->loadFromLoader('bar.joe.loo', $loaderMock);
 	} // end testLoadFromLoaderNestedNoticesUnexpectedScalars();
 
-	/**
-	 * @expectedException BadMethodCallException
-	 */
-	public function testSaveThrowsExceptionWhenNoCacheIsInstalled()
-	{
-		$collector = new Collector();
-		$collector->save();
-	} // end testSaveThrowsExceptionWhenNoCacheIsInstalled();
-
-	public function testSaveSavesTheDataInTheCache()
-	{
-		$cacheMock = $this->getMockForAbstractClass('\\Opl\\Cache\\Cache', array(0 => array('prefix' => 'mock', 'lifetime' => 100)));
-		$cacheMock->expects($this->once())
-			->method('set')
-			->with(
-				$this->equalTo('collector'),
-				$this->equalTo(array('foo' => 'bar'))
-			)
-			->will($this->returnValue(true));
-
-		$collector = new Collector($cacheMock);
-		$collector->loadFromArray(Collector::ROOT, array('foo' => 'bar'));
-		$collector->save();
-	} // end testSaveSavesTheDataInTheCache();
-
 	public function testLoadFromLoaderReturnsFalseIfTheLoaderDoesNotReturnArray()
 	{
 		$loaderMock1 = $this->getMock('\\Opl\\Collector\\LoaderInterface');
@@ -260,4 +205,20 @@ class CollectorTest extends \PHPUnit_Framework_TestCase
 		$this->assertFalse($collector->loadFromLoader(Collector::ROOT, $loaderMock1));
 		$this->assertFalse($collector->loadFromLoader('foo', $loaderMock2));
 	} // end testLoadFromLoaderReturnsFalseIfTheLoaderDoesNotReturnArray();
+
+	public function testSerialization()
+	{
+		$collector = new Collector();
+		$collector->loadFromArray(Collector::ROOT, array(
+			'foo' => 'foo value',
+			'bar' => array(
+				'joe' => 'joe value'
+			)
+		));
+
+		$string = serialize($collector);
+		$otherCollector = unserialize($string);
+		$this->assertEquals('foo value', $otherCollector->get('foo'));
+		$this->assertEquals('joe value', $otherCollector->get('bar.joe'));
+	} // end testCacheNotSet();
 } // end CollectorTest;
