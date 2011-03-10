@@ -11,6 +11,7 @@
  */
 namespace Opl\Collector;
 use BadMethodCallException;
+use Serializable;
 use Opl\Cache\Cache;
 
 /**
@@ -21,70 +22,17 @@ use Opl\Cache\Cache;
  * @copyright Invenzzia Group <http://www.invenzzia.org/> and contributors.
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
-class Collector extends Provider
+class Collector extends Provider implements Serializable
 {
-	const CACHE_ENABLED = true;
-	const CACHE_DISABLED = false;
 	const ROOT = null;
 
-	protected $cache;
-	protected $cacheLoaded = false;
-	protected $cacheKey;
-
 	/**
-	 * Creates the collector object. The constructor initializes the caching
-	 * system, if it is called with arguments.
-	 *
-	 * @param Cache $cache The cache manager.
-	 * @param string $cacheKey The cache key used to store the collection entries.
+	 * Creates the collector object.
 	 */
-	public function __construct(Cache $cache = null, $cacheKey = 'collector')
+	public function __construct()
 	{
-		if(null !== $cache)
-		{
-			$this->cache = $cache;
-			$this->data = $cache->get($cacheKey);
-
-			if(null === $this->data)
-			{
-				$this->data = array();
-			}
-			else
-			{
-				$this->cacheLoaded = true;
-			}
-			$this->cacheKey = $cacheKey;
-		}
-		else
-		{
-			$this->data = array();
-		}
+		$this->data = array();
 	} // end __construct();
-
-	/**
-	 * Checks if the data have been loaded from the cache.
-	 *
-	 * @return boolean
-	 */
-	public function isCached()
-	{
-		return $this->cacheLoaded;
-	} // end isCached();
-
-	/**
-	 * Saves the already loaded data back to the cache, updating it. Do not
-	 * call this method if the cache is not configured.
-	 *
-	 * @throws BadMethodCallException
-	 */
-	public function save()
-	{
-		if(null === $this->cache)
-		{
-			throw new BadMethodCallException('Cannot use Opl\\Collector\\Collector::save(): no cache system installed.');
-		}
-		$this->cache->set($this->cacheKey, $this->data);
-	} // end save();
 
 	/**
 	 * Loads the data to the collector from a loader. If the path is different
@@ -136,4 +84,21 @@ class Collector extends Provider
 
 		return true;
 	} // end loadFromArray();
+
+	/**
+	 * Serializes the data for the purposes of caching.
+	 */
+	public function serialize()
+	{
+		return serialize($this->data);
+	} // end serialize();
+
+	/**
+	 * Unserializes the object loaded from the cache.
+	 * @param string $string
+	 */
+	public function unserialize($string)
+	{
+		$this->data = unserialize($string);
+	} // end unserialize();
 } // end Collector;
