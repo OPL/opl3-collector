@@ -11,6 +11,7 @@
  */
 namespace Opl\Collector;
 use BadMethodCallException;
+use DomainException;
 use Serializable;
 use Opl\Cache\Cache;
 use Opl\Collector\Exception\UnexpectedCollectionException;
@@ -38,30 +39,33 @@ class Collector extends Provider implements Serializable
 	/**
 	 * Loads the data to the collector from a loader. If the path is different
 	 * than <tt>self::ROOT</tt>, the data are appended under the specified path.
-	 * 
+	 * If the loader does not return an array, the method throws an exception.
+	 * Implements fluent interface.
+	 *
+	 * @throws DomainException
 	 * @param string|null $path The path, where the data should be saved. Null means the root.
 	 * @param LoaderInterface $loader The loader used to load the data.
-	 * @return boolean
+	 * @return Collector
 	 */
 	public function loadFromLoader($path, LoaderInterface $loader)
 	{
 		$data = $loader->import();
+		
+		if(!is_array($data))
+		{
+			throw new DomainException('Cannot load the data under \''.$path.'\': The loader must return an array.');
+		}
+
 		if(null === $path)
 		{
-			if(is_array($data))
-			{
-				$this->data = array_merge_recursive($this->data, $data);
-				return true;
-			}
-			return false;
+			$this->_loadFromArray($this->data, $data);
 		}
-		$partial = &$this->findKey($path);
-		if(is_array($data))
+		else
 		{
-			$partial = array_merge_recursive($partial, $data);
-			return true;
+			$this->_loadFromArray($this->findKey($path), $data);
 		}
-		return false;
+
+		return $this;
 	} // end loadFromLoader();
 
 	/**
