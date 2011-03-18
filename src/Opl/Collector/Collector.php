@@ -66,23 +66,24 @@ class Collector extends Provider implements Serializable
 	/**
 	 * Loads the data to the collector from the specified array. If the path is
 	 * different than <tt>self::ROOT</tt>, the data are appended under the specified
-	 * path.
+	 * path. Implements fluent interface
 	 * 
 	 * @param string|null $path The path, where the data should be saved. Null means root.
 	 * @param array $array The array with the data.
-	 * @return boolean
+	 * @return Opl\Collector\Collector
 	 */
 	public function loadFromArray($path, array $array)
 	{
 		if(null === $path)
 		{
-			$this->data = array_merge_recursive($this->data, $array);
-			return true;
+			$this->_loadFromArray($this->data, $array);
 		}
-		$partial = &$this->findKey($path);
-		$partial = array_merge_recursive($partial, $array);
+		else
+		{
+			$this->_loadFromArray($this->findKey($path), $array);
+		}
 
-		return true;
+		return $this;
 	} // end loadFromArray();
 
 	/**
