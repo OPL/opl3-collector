@@ -249,4 +249,30 @@ class CollectorTest extends \PHPUnit_Framework_TestCase
 		$collector->setLazyLoader('foo', $loaderMock1);
 		$collector->get('foo.bar');
 	} // end testSetLazyLoaderThrowsExceptionWhenPathIsOccupiedByCollection();
+
+	public function testLoadFromLoaderImplementsFluentInterface()
+	{
+		$loaderMock = $this->getMock('\\Opl\\Collector\\LoaderInterface');
+		$loaderMock->expects($this->once())
+			->method('import')
+			->will($this->returnValue(array()
+		));
+
+		$collector = new Collector();
+		$this->assertSame($collector, $collector->loadFromLoader(Collector::ROOT, $loaderMock));
+	} // end testLoadFromLoaderImplementsFluentInterface();
+
+	public function testLoadFromArrayImplementsFluentInterface()
+	{
+		$collector = new Collector();
+		$this->assertSame($collector, $collector->loadFromArray(Collector::ROOT, array('foo' => 42)));
+	} // end testLoadFromArrayImplementsFluentInterface();
+
+	public function testSetLazyLoaderImplementsFluentInterface()
+	{
+		$loaderMock1 = $this->getMock('\\Opl\\Collector\\LoaderInterface');
+
+		$collector = new Collector();
+		$this->assertSame($collector, $collector->setLazyLoader('foo', $loaderMock1));
+	} // end testSetLazyLoaderImplementsFluentInterface();
 } // end CollectorTest;
