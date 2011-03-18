@@ -49,6 +49,10 @@ class Provider implements ProviderInterface
 				}
 				return null;
 			}
+			if($data[$path[$i]] instanceof LoaderInterface)
+			{
+				$data[$path[$i]] = $data[$path[$i]]->import();
+			}
 			if(is_array($data[$path[$i]]))
 			{
 				if($i == $size - 1)
@@ -112,4 +116,17 @@ class Provider implements ProviderInterface
 		}
 		return $data;
 	} // end findKey();
+
+	/**
+	 * Loads the data to the collector from the specified array. If the path is
+	 * different than <tt>self::ROOT</tt>, the data are appended under the specified
+	 * path.
+	 *
+	 * @param string|null $path The path, where the data should be saved. Null means root.
+	 * @param array $array The array with the data.
+	 */
+	protected function _loadFromArray(&$partial, array $array)
+	{
+		$partial = array_merge_recursive($partial, $array);
+	} // end _loadFromArray();
 } // end Provider;
