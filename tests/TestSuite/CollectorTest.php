@@ -221,4 +221,35 @@ class CollectorTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('foo value', $otherCollector->get('foo'));
 		$this->assertEquals('joe value', $otherCollector->get('bar.joe'));
 	} // end testCacheNotSet();
+
+	public function testSetLazyLoaderInstallsLazyLoader()
+	{
+		$loaderMock1 = $this->getMock('\\Opl\\Collector\\LoaderInterface');
+		$loaderMock1->expects($this->once())
+			->method('import')
+			->will($this->returnValue(array('bar' => 42)));
+
+		$collector = new Collector();
+		$collector->setLazyLoader('foo', $loaderMock1);
+		$this->assertEquals(42, $collector->get('foo.bar'));
+	} // end testSetLazyLoaderInstallsLazyLoader();
+
+	/**
+	 * @expectedException Opl\Collector\Exception\UnexpectedCollectionException
+	 */
+	public function testSetLazyLoaderThrowsExceptionWhenPathIsOccupiedByCollection()
+	{
+		$loaderMock1 = $this->getMock('\\Opl\\Collector\\LoaderInterface');
+
+		$collector = new Collector();
+
+		$collector->loadFromArray(Collector::ROOT, array(
+			'foo' => array(
+				'joe' => 'joe value'
+			)
+		));
+
+		$collector->setLazyLoader('foo', $loaderMock1);
+		$collector->get('foo.bar');
+	} // end testSetLazyLoaderThrowsExceptionWhenPathIsOccupiedByCollection();
 } // end CollectorTest;

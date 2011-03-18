@@ -51,7 +51,7 @@ class Provider implements ProviderInterface
 			}
 			if($data[$path[$i]] instanceof LoaderInterface)
 			{
-				$this->_loadFromArray($data[$path[$i]], $data[$path[$i]]->import());
+				$data[$path[$i]] = $data[$path[$i]]->import();
 			}
 			if(is_array($data[$path[$i]]))
 			{

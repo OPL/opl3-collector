@@ -13,6 +13,7 @@ namespace Opl\Collector;
 use BadMethodCallException;
 use Serializable;
 use Opl\Cache\Cache;
+use Opl\Collector\Exception\UnexpectedCollectionException;
 
 /**
  * This class provides a complete implementation of the data provider. It allows
@@ -85,6 +86,29 @@ class Collector extends Provider implements Serializable
 
 		return $this;
 	} // end loadFromArray();
+
+	/**
+	 * Installs the lazy loader under the given path. It will be called
+	 * automatically during the first reference to one of the options
+	 * from this path. Implements fluent interface.
+	 *
+	 * @throws UnexpectedCollectionException
+	 * @param string $path The data path
+	 * @param LoaderInterface $loader
+	 * @return Collector
+	 */
+	public function setLazyLoader($path, LoaderInterface $loader)
+	{
+		$partial = &$this->findKey($path);
+
+		if(is_array($partial) && sizeof($partial) > 0)
+		{
+			throw new UnexpectedCollectionException('The path \''.$path.'\' is already occupied by a collection.');
+		}
+		$partial = $loader;
+
+		return $this;
+	} // end setLazyLoader();
 
 	/**
 	 * Serializes the data for the purposes of caching.
