@@ -16,6 +16,7 @@ class AllTests extends \PHPUnit_Framework_TestSuite
 
 		$suite->addTestSuite('TestSuite\\Visit\\HostLoaderTest');
 		$suite->addTestSuite('TestSuite\\Visit\\ConnectionLoaderTest');
+		$suite->addTestSuite('TestSuite\\Visit\\BrowserLoaderTest');
 
 		return $suite;
 	} // end suite();
