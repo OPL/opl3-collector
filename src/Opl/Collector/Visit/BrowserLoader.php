@@ -27,7 +27,12 @@ class BrowserLoader implements LoaderInterface
 	 */
 	public function import()
 	{
-		if(!isset($_SERVER['USER_AGENT']))
+		if(ini_get('browscap') == '')
+		{
+			throw new RuntimeException('Cannot initialize the browser loader: \'browscap\' PHP directive not set.');
+		}
+
+		if(!isset($_SERVER['HTTP_USER_AGENT']))
 		{
 			return array(
 				'browser' => null,
@@ -52,10 +57,10 @@ class BrowserLoader implements LoaderInterface
 				)
 			);
 		}
-		$info = get_browser($_SERVER['USER_AGENT'], true);
+		$info = get_browser($_SERVER['HTTP_USER_AGENT'], true);
 
 		return array(
-			'browser' => $info['parent'],
+			'browser' => (isset($info['parent']) ? $info['parent'] : $info['browser'].' '.$info['version']),
 			'browserName' => $info['browser'],
 			'version' => $info['version'],
 			'platform' => $info['platform'],
