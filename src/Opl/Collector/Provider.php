@@ -41,7 +41,7 @@ class Provider implements ProviderInterface
 		$data = &$this->data;
 		for($i = 0; $i < $size; $i++)
 		{
-			if(!isset($data[$path[$i]]))
+			if(!array_key_exists($path[$i], $data))
 			{
 				if(self::THROW_EXCEPTION == $errorReporting)
 				{
