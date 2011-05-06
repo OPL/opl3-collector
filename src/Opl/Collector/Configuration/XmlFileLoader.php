@@ -12,6 +12,7 @@
 namespace Opl\Collector\Configuration;
 use BadMethodCallException;
 use SplQueue;
+use Opl\Collector\ProviderInterface;
 use Opl\Collector\Exception\XmlValidityException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -27,7 +28,7 @@ class XmlFileLoader extends FileLoader
 	/**
 	 * @see LoaderInterface
 	 */
-	public function import()
+	public function import(ProviderInterface $provider)
 	{
 		if(null === $this->currentFile)
 		{

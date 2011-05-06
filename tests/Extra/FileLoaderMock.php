@@ -7,11 +7,12 @@
  * @license http://www.invenzzia.org/license/new-bsd New BSD License
  */
 namespace Extra;
+use Opl\Collector\ProviderInterface;
 use Opl\Collector\Configuration\FileLoader;
 
 class FileLoaderMock extends FileLoader
 {
-	public function import()
+	public function import(ProviderInterface $provider)
 	{
 		return array();
 	} // end import();

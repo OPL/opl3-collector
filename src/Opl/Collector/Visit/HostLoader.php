@@ -11,6 +11,7 @@
  */
 namespace Opl\Collector\Visit;
 use Opl\Collector\LoaderInterface;
+use Opl\Collector\ProviderInterface;
 
 /**
  * This collector collects the basic information about the user host
@@ -25,7 +26,7 @@ class HostLoader implements LoaderInterface
 	/**
 	 * @see LoaderInterface
 	 */
-	public function import()
+	public function import(ProviderInterface $provider)
 	{
 		// Find out, whether we are using IPv4 or IPv6
 		$protocol = 4;

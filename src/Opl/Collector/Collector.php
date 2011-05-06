@@ -49,7 +49,7 @@ class Collector extends Provider implements Serializable
 	 */
 	public function loadFromLoader($path, LoaderInterface $loader)
 	{
-		$data = $loader->import();
+		$data = $loader->import($this);
 		
 		if(!is_array($data))
 		{

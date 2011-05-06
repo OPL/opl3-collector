@@ -22,7 +22,9 @@ interface LoaderInterface
 {
 	/**
 	 * Returns the imported data in a form of an array.
+	 * 
+	 * @param \Opl\Collector\ProviderInterface $provider The current provider that can be used to ask for some extra data.
 	 * @return array
 	 */
-	public function import();
+	public function import(ProviderInterface $provider);
 } // end LoaderInterface;

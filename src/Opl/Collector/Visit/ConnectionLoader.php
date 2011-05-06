@@ -11,6 +11,7 @@
  */
 namespace Opl\Collector\Visit;
 use Opl\Collector\LoaderInterface;
+use Opl\Collector\ProviderInterface;
 
 /**
  * This collector collects the information about the connection to
@@ -25,7 +26,7 @@ class ConnectionLoader implements LoaderInterface
 	/**
 	 * @see LoaderInterface
 	 */
-	public function import()
+	public function import(ProviderInterface $provider)
 	{
 		$recognized = array('HTTPS' => 'https', 'HTTP' => 'http', 'WAP' => 'wap');
 		$protocol = 'unknown';

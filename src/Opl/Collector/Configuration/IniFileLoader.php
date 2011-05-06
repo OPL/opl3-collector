@@ -11,6 +11,7 @@
  */
 namespace Opl\Collector\Configuration;
 use BadMethodCallException;
+use Opl\Collector\ProviderInterface;
 use Opl\Collector\Exception\LoaderException;
 
 /**
@@ -25,7 +26,7 @@ class IniFileLoader extends FileLoader
 	/**
 	 * @see LoaderInterface
 	 */
-	public function import()
+	public function import(ProviderInterface $provider)
 	{
 		if(null === $this->currentFile)
 		{

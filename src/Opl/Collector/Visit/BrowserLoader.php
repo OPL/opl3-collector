@@ -11,6 +11,7 @@
  */
 namespace Opl\Collector\Visit;
 use Opl\Collector\LoaderInterface;
+use Opl\Collector\ProviderInterface;
 
 /**
  * This collector collects the information about the browser and its
@@ -25,7 +26,7 @@ class BrowserLoader implements LoaderInterface
 	/**
 	 * @see LoaderInterface
 	 */
-	public function import()
+	public function import(ProviderInterface $provider)
 	{
 		if(ini_get('browscap') == '')
 		{
