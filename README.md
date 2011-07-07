@@ -14,7 +14,6 @@ Requirements
 ------------
 
 + PHP 5.3+
-+ [Open Power Cache](http://www.github.com/OPL/opl3-cache) (Optional)
 + [Symfony 2 YAML Component](http://www.symfony-reloaded.org) (Optional)
 
 Contents
