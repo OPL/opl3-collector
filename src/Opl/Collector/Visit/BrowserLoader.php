@@ -12,6 +12,7 @@
 namespace Opl\Collector\Visit;
 use Opl\Collector\LoaderInterface;
 use Opl\Collector\ProviderInterface;
+use RuntimeException;
 
 /**
  * This collector collects the information about the browser and its
@@ -71,7 +72,7 @@ class BrowserLoader implements LoaderInterface
 				'iframes' => (bool)$info['iframes'],
 				'cookies' => (bool)$info['cookies'],
 				'tables' => (bool)$info['tables'],
-				'css' => (bool)$info['supportscss'],
+				'css' => (isset($info['supportscss']) ? (bool)$info['supportscss'] : true),
 				'vbscript' => (bool)$info['vbscript'],
 				'html5Forms' => false,
 				'canvas' => false,
