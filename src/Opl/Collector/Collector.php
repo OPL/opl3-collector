@@ -10,11 +10,10 @@
  * and other contributors. See website for details.
  */
 namespace Opl\Collector;
+use Opl\Collector\Exception\UnexpectedCollectionException;
 use BadMethodCallException;
 use DomainException;
 use Serializable;
-use Opl\Cache\Cache;
-use Opl\Collector\Exception\UnexpectedCollectionException;
 
 /**
  * This class provides a complete implementation of the data provider. It allows
